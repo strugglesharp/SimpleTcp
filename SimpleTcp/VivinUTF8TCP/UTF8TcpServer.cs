@@ -88,7 +88,7 @@ namespace SimpleTcp.VivinUTF8TCP
         {
             //  Events.HandleDataReceived(sender, e);
             Console.WriteLine("throw not impletment!");
-
+            1
         }
 
         private void Events_ClientDisconnected(object sender, ClientDisconnectedEventArgs e)

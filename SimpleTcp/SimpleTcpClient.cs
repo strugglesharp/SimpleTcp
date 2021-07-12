@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleTcp.VivinUTF8TCP;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -141,7 +142,7 @@ namespace SimpleTcp
         private Task _DataReceiver = null;
         private CancellationTokenSource _TokenSource = new CancellationTokenSource();
         private CancellationToken _Token;
-
+        internal BuffManager RecvBuff;
         #endregion
 
         #region Constructors-and-Factories

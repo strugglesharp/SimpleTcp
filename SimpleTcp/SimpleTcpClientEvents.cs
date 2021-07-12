@@ -14,17 +14,17 @@ namespace SimpleTcp
         /// <summary>
         /// Event to call when the connection is established.
         /// </summary>
-        public event EventHandler<ClientConnectedEventArgs> Connected;
+        public event Action<SimpleTcpClient ,ClientConnectedEventArgs> Connected;
 
         /// <summary>
         /// Event to call when the connection is destroyed.
         /// </summary>
-        public event EventHandler<ClientDisconnectedEventArgs> Disconnected;
+        public event Action<SimpleTcpClient, ClientDisconnectedEventArgs> Disconnected;
 
         /// <summary>
         /// Event to call when byte data has become available from the server.
         /// </summary>
-        public event EventHandler<DataReceivedEventArgs> DataReceived;
+        public event Action<SimpleTcpClient, DataReceivedEventArgs> DataReceived;
 
         #endregion
 
