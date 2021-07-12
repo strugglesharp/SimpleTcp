@@ -9,7 +9,7 @@ namespace UTF8TCPClientTest
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main1(string[] args)
         {
             UTF8TcpClient _Client = new UTF8TcpClient("127.0.0.1", 8000);
             _Client.Events.Connected += Events_Connected; ;
@@ -23,7 +23,7 @@ namespace UTF8TCPClientTest
 
             _Client.ConnectWithRetries(5000);
 
-            _Client.Send("Hello, world!");
+           // _Client.Send("Hello, world!");
             Console.ReadKey();
         }
 

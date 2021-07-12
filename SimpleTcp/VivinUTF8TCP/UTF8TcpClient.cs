@@ -30,6 +30,7 @@ namespace SimpleTcp.VivinUTF8TCP
         public UTF8TcpClient(string ipPort)
         {
             _client = new SimpleTcpClient(ipPort);
+            InitBind();
         }
 
         BuffManager _recvBuffer;
@@ -42,6 +43,11 @@ namespace SimpleTcp.VivinUTF8TCP
         public UTF8TcpClient(string serverIpOrHostname, int port)
         {
             _client = new SimpleTcpClient(serverIpOrHostname, port);
+            InitBind();
+        }
+
+        void InitBind()
+        {
             _client.Settings.StreamBufferSize = StreamBuffSize;
             _client.Events.Connected += Events_Connected;
             _client.Events.Disconnected += Events_Disconnected;
@@ -76,12 +82,12 @@ namespace SimpleTcp.VivinUTF8TCP
             var data = e.Data.ToList();
             var LEN = data.Count;
             int p = 0;
-
+            int idxSTX = 0, idxETX = 0;
             while (p < LEN)
             {
                 if (_recvBuffer.Counter == 0) //还未收到STX
                 {
-                    var idxSTX = data.IndexOf((byte)STX, p);
+                    idxSTX = data.IndexOf((byte)STX, p);
 
                     if (idxSTX < 0)
                     {//未找到STX, 全部忽略
@@ -89,7 +95,7 @@ namespace SimpleTcp.VivinUTF8TCP
                     }
                     else
                     {//找到了STX
-                        var idxETX = data.IndexOf((byte)ETX, idxSTX);
+                        idxETX = data.IndexOf((byte)ETX, idxSTX);
                         if (idxETX < 0)
                         {//未找到ETX,全部存储
                             _recvBuffer.Concat(data, idxSTX, LEN - idxSTX);
@@ -97,8 +103,8 @@ namespace SimpleTcp.VivinUTF8TCP
                         }
                         else
                         {//找到了ETX
-                            _recvBuffer.Concat(data, idxSTX, idxETX - idxSTX+1);                        
-                            _Events.HandleDataReceived(sender, new UTF8ReceivedEventArgs(e.IpPort, _recvBuffer  ));
+                            _recvBuffer.Concat(data, idxSTX, idxETX - idxSTX + 1);
+                            _Events.HandleDataReceived(sender, new UTF8ReceivedEventArgs(e.IpPort, _recvBuffer));
                             _recvBuffer.Clear();//处理完一笔就清空一笔.
 
                             p = idxETX + 1; //后续处理的起点
@@ -106,13 +112,22 @@ namespace SimpleTcp.VivinUTF8TCP
                         }
                     }
                 }
-                else //已经有STX,等待ETX
+                else //前一帧已经有STX,等待ETX
                 {
-                    var idxSTX = data.IndexOf((byte)STX, p);
+                    idxSTX = data.IndexOf((byte)STX, p);
+                    idxETX = data.IndexOf((byte)ETX, p);
+                    if (0 <= idxETX && idxETX < idxSTX)
+                    {//第一帧STX+data1, 第二帧 data2+ETX+STX+data3+ETX 
+                        _recvBuffer.Concat(data, p, idxETX + 1);
+                        _Events.HandleDataReceived(sender, new UTF8ReceivedEventArgs(e.IpPort, _recvBuffer));
+                        _recvBuffer.Clear();//处理完一笔就清空一笔.
 
+                        p = idxETX + 1; //后续处理的起点
+                        continue;
+                    }
                     if (idxSTX < 0)
                     {//未找到STX, 全部忽略
-                        var idxETX = data.IndexOf((byte)ETX, p);
+                        idxETX = data.IndexOf((byte)ETX, p);
                         if (idxETX < 0)
                         {//未找到ETX,全部存储
                             _recvBuffer.Concat(data, p, LEN - p);
@@ -120,8 +135,8 @@ namespace SimpleTcp.VivinUTF8TCP
                         }
                         else
                         {//找到了ETX
-                            _recvBuffer.Concat(data, p, idxETX - p+1);
-                            _Events.HandleDataReceived(sender, new UTF8ReceivedEventArgs(e.IpPort, _recvBuffer ));
+                            _recvBuffer.Concat(data, p, idxETX - p + 1);
+                            _Events.HandleDataReceived(sender, new UTF8ReceivedEventArgs(e.IpPort, _recvBuffer));
                             _recvBuffer.Clear();//处理完一笔就清空一笔.
 
                             p = idxETX + 1; //后续处理的起点
@@ -135,7 +150,7 @@ namespace SimpleTcp.VivinUTF8TCP
                         continue;
                     }
                 }
-            } 
+            }
         }
 
         UTF8TcpClientEvents _Events = new UTF8TcpClientEvents();
@@ -155,6 +170,9 @@ namespace SimpleTcp.VivinUTF8TCP
                 else _Events = value;
             }
         }
+
+        public bool IsConnected => _client.IsConnected;
+
         /// <summary>
         /// Send data to the server.
         /// </summary>
