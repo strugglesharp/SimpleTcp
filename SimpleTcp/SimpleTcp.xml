@@ -642,6 +642,11 @@
             UTF8Tcp client events.
             </summary>
         </member>
+        <member name="P:SimpleTcp.VivinUTF8TCP.UTF8TcpClient.IsConnected">
+            <summary>
+            Indicates whether or not the client is connected to the server.
+            </summary>
+        </member>
         <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpClient.Send(System.String)">
             <summary>
             Send data to the server.
@@ -685,6 +690,120 @@
             </summary>
         </member>
         <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpClientEvents.#ctor">
+            <summary>
+            Instantiate the object.
+            </summary>
+        </member>
+        <member name="T:SimpleTcp.VivinUTF8TCP.UTF8TcpServer">
+            <summary>
+            收发以STX开头,ETX结尾的UTF的字符串
+            </summary>
+        </member>
+        <member name="F:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.STX">
+            <summary>
+            起始字符
+            </summary>
+        </member>
+        <member name="F:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.ETX">
+            <summary>
+            结束字符
+            </summary>
+        </member>
+        <member name="P:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.StreamBuffSize">
+             <summary>
+            设定缓存大小,仅在初始化前有效!
+             </summary>
+        </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.#ctor(System.String)">
+            <summary>
+            Instantiates the TCP server without SSL.  Set the ClientConnected, ClientDisconnected, and DataReceived callbacks.  Once set, use Start() to begin listening for connections.
+            </summary>
+            <param name="ipPort">The IP:port of the server.</param> 
+        </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.#ctor(System.String,System.Int32)">
+            <summary>
+            Instantiates the TCP server without SSL.  Set the ClientConnected, ClientDisconnected, and DataReceived callbacks.  Once set, use Start() to begin listening for connections.
+            </summary>
+            <param name="listenerIp">The listener IP address or hostname.</param>
+            <param name="port">The TCP port on which to listen.</param>
+        </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.Start">
+            <summary>
+            Start accepting connections.
+            </summary>
+        </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.StartAsync">
+            <summary>
+            Start accepting connections.
+            </summary>
+            <returns>Task.</returns>
+        </member>
+        <member name="P:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.Statistics">
+            <summary>
+            SimpleTcp statistics.
+            </summary>
+        </member>
+        <member name="P:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.Keepalive">
+            <summary>
+            SimpleTcp keepalive settings.
+            </summary>
+        </member>
+        <member name="P:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.Settings">
+            <summary>
+            SimpleTcp client settings.
+            </summary>
+        </member>
+        <member name="P:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.Logger">
+            <summary>
+            Method to invoke to send a log message.
+            </summary>
+        </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.Dispose">
+            <summary>
+            Dispose of the TCP client.
+            </summary>
+        </member>
+        <member name="P:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.Events">
+            <summary>
+            UTF8Tcp client events.
+            </summary>
+        </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.Send(System.String,System.String)">
+            <summary>
+            Send data to the specified client by IP:port.
+            </summary>
+            <param name="ipPort">The client IP:port string.</param>
+            <param name="data">String containing data to send.</param>
+        </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.SendAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Send data to the specified client by IP:port asynchronously.
+            </summary>
+            <param name="ipPort">The client IP:port string.</param>
+            <param name="data">String containing data to send.</param>
+            <param name="token">Cancellation token for canceling the request.</param>
+        </member>
+        <member name="T:SimpleTcp.VivinUTF8TCP.UTF8TcpServerEvents">
+            <summary>
+            UTF8TcpServerEvents
+            </summary>
+        </member>
+        <member name="E:SimpleTcp.VivinUTF8TCP.UTF8TcpServerEvents.Connected">
+            <summary>
+            Event to call when the connection is established.
+            </summary>
+        </member>
+        <member name="E:SimpleTcp.VivinUTF8TCP.UTF8TcpServerEvents.Disconnected">
+            <summary>
+            Event to call when the connection is destroyed.
+            </summary>
+        </member>
+        <member name="E:SimpleTcp.VivinUTF8TCP.UTF8TcpServerEvents.DataReceived">
+            <summary>
+            Event to call when byte data has become available from the server.
+            </summary>
+        </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpServerEvents.#ctor">
             <summary>
             Instantiate the object.
             </summary>

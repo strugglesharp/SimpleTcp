@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace SimpleTcp
+namespace SimpleTcp.VivinUTF8TCP
 {
     /// <summary>
-    /// SimpleTcp client events.
+    /// UTF8TcpServerEvents
     /// </summary>
-    public class SimpleTcpClientEvents
+    public class UTF8TcpServerEvents
     {
         #region Public-Members
 
@@ -24,7 +22,7 @@ namespace SimpleTcp
         /// <summary>
         /// Event to call when byte data has become available from the server.
         /// </summary>
-        public event EventHandler<DataReceivedEventArgs> DataReceived;
+        public event EventHandler<UTF8ReceivedEventArgs> DataReceived;
 
         #endregion
 
@@ -37,7 +35,7 @@ namespace SimpleTcp
         /// <summary>
         /// Instantiate the object.
         /// </summary>
-        public SimpleTcpClientEvents()
+        public UTF8TcpServerEvents()
         {
 
         }
@@ -46,19 +44,19 @@ namespace SimpleTcp
 
         #region Public-Methods
 
-        internal void HandleConnected(SimpleTcpClient client, ClientConnectedEventArgs args)
+        internal void HandleConnected(object sender, ClientConnectedEventArgs args)
         {
-            Connected?.Invoke(client, args);
+            Connected?.Invoke(sender, args);
         }
 
-        internal void HandleClientDisconnected(SimpleTcpClient client, ClientDisconnectedEventArgs args)
+        internal void HandleClientDisconnected(object sender, ClientDisconnectedEventArgs args)
         {
-            Disconnected?.Invoke(client, args);
+            Disconnected?.Invoke(sender, args);
         }
 
-        internal void HandleDataReceived(SimpleTcpClient client, DataReceivedEventArgs args)
+        internal void HandleDataReceived(object sender, UTF8ReceivedEventArgs args)
         {
-            DataReceived?.Invoke(client, args);
+            DataReceived?.Invoke(sender, args);
         }
 
         #endregion

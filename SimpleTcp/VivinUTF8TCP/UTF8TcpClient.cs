@@ -171,6 +171,9 @@ namespace SimpleTcp.VivinUTF8TCP
             }
         }
 
+        /// <summary>
+        /// Indicates whether or not the client is connected to the server.
+        /// </summary>
         public bool IsConnected => _client.IsConnected;
 
         /// <summary>
