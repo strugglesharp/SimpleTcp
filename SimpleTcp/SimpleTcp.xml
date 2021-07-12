@@ -568,5 +568,126 @@
             Reset statistics other than StartTime and UpTime.
             </summary>
         </member>
+        <member name="T:SimpleTcp.VivinUTF8TCP.BuffManager">
+            <summary>
+            任意操作中发现内存超限,会自动清空全部内容
+            处理完一笔就清空一笔,里面保持最多一句
+            </summary>
+        </member>
+        <member name="T:SimpleTcp.VivinUTF8TCP.UTF8ReceivedEventArgs">
+            <summary>
+            UTF8ReceivedEventArgs
+            </summary>
+        </member>
+        <member name="P:SimpleTcp.VivinUTF8TCP.UTF8ReceivedEventArgs.IpPort">
+            <summary>
+            The IP address and port number of the connected endpoint.
+            </summary>
+        </member>
+        <member name="P:SimpleTcp.VivinUTF8TCP.UTF8ReceivedEventArgs.Sentence">
+            <summary>
+            The data received from the client.
+            </summary>
+        </member>
+        <member name="T:SimpleTcp.VivinUTF8TCP.UTF8TcpClient">
+            <summary>
+            收发以STX开头,ETX结尾的UTF的字符串
+            </summary>
+        </member>
+        <member name="F:SimpleTcp.VivinUTF8TCP.UTF8TcpClient.STX">
+            <summary>
+            起始字符
+            </summary>
+        </member>
+        <member name="F:SimpleTcp.VivinUTF8TCP.UTF8TcpClient.ETX">
+            <summary>
+            结束字符
+            </summary>
+        </member>
+        <member name="P:SimpleTcp.VivinUTF8TCP.UTF8TcpClient.StreamBuffSize">
+             <summary>
+            设定缓存大小,仅在初始化前有效!
+             </summary>
+        </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpClient.#ctor(System.String)">
+            <summary>
+            Instantiates the TCP client without SSL.  Set the Connected, Disconnected, and DataReceived callbacks.  Once set, use Connect() to connect to the server.
+            </summary>
+            <param name="ipPort">The IP:port of the server.</param> 
+        </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpClient.#ctor(System.String,System.Int32)">
+            <summary>
+            Instantiates the TCP client without SSL.  Set the Connected, Disconnected, and DataReceived callbacks.  Once set, use Connect() to connect to the server.
+            </summary>
+            <param name="serverIpOrHostname">The server IP address or hostname.</param>
+            <param name="port">The TCP port on which to connect.</param>
+        </member>
+        <member name="P:SimpleTcp.VivinUTF8TCP.UTF8TcpClient.Keepalive">
+            <summary>
+            SimpleTcp keepalive settings.
+            </summary>
+        </member>
+        <member name="P:SimpleTcp.VivinUTF8TCP.UTF8TcpClient.Settings">
+            <summary>
+            SimpleTcp client settings.
+            </summary>
+        </member>
+        <member name="P:SimpleTcp.VivinUTF8TCP.UTF8TcpClient.Logger">
+            <summary>
+            Method to invoke to send a log message.
+            </summary>
+        </member>
+        <member name="P:SimpleTcp.VivinUTF8TCP.UTF8TcpClient.Events">
+            <summary>
+            UTF8Tcp client events.
+            </summary>
+        </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpClient.Send(System.String)">
+            <summary>
+            Send data to the server.
+            </summary>
+            <param name="UTF8Text">String containing data to send.</param>
+        </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpClient.ConnectWithRetries(System.Nullable{System.Int32})">
+            <summary>
+            Establish the connection to the server with retries up to either the timeout specified or the value in Settings.ConnectTimeoutMs.
+            </summary>
+            <param name="timeoutMs">The amount of time in milliseconds to continue attempting connections.</param>
+        </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpClient.Disconnect">
+            <summary>
+            Disconnect from the server.
+            </summary>
+        </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpClient.Dispose">
+            <summary>
+            Dispose of the TCP client.
+            </summary>
+        </member>
+        <member name="T:SimpleTcp.VivinUTF8TCP.UTF8TcpClientEvents">
+            <summary>
+            UTF8TcpClientEvents
+            </summary>
+        </member>
+        <member name="E:SimpleTcp.VivinUTF8TCP.UTF8TcpClientEvents.Connected">
+            <summary>
+            Event to call when the connection is established.
+            </summary>
+        </member>
+        <member name="E:SimpleTcp.VivinUTF8TCP.UTF8TcpClientEvents.Disconnected">
+            <summary>
+            Event to call when the connection is destroyed.
+            </summary>
+        </member>
+        <member name="E:SimpleTcp.VivinUTF8TCP.UTF8TcpClientEvents.DataReceived">
+            <summary>
+            Event to call when byte data has become available from the server.
+            </summary>
+        </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpClientEvents.#ctor">
+            <summary>
+            Instantiate the object.
+            </summary>
+        </member>
     </members>
 </doc>
