@@ -11,15 +11,15 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
 {
     [TestClass()]
     public class UTF8TcpServerTests
-    { 
+    {
         const string MSG1 = "ABCDE";
         const string MSG2 = "行生生生生产";
         const string MSG3 = "1234567890";
         const string STX = "\x02";
         const string ETX = "\x03";
-        static void CreateTCPPair(  out UTF8TcpServer tcpsvr, out SimpleTcpClient client)
+        static void CreateTCPPair(out UTF8TcpServer tcpsvr, out SimpleTcpClient client)
         {
-         var   port = 9000;
+            var port = 9000;
             tcpsvr = new UTF8TcpServer($"127.0.0.1:{port}");
             client = new SimpleTcpClient($"127.0.0.1:{port}");
             client.Keepalive.EnableTcpKeepAlives = true;
@@ -29,14 +29,14 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
 
             Console.WriteLine($"使用端口 {port}");
         }
-        static void CloseTCPPair(UTF8TcpServer tcpsvr,   SimpleTcpClient client)
+        static void CloseTCPPair(UTF8TcpServer tcpsvr, SimpleTcpClient client)
         {
             tcpsvr.Stop();
             tcpsvr.Dispose();
             client.Disconnect();
             client.Dispose();
         }
-     
+
         public void 手动测试测试()
         {
             CreateTCPPair(out UTF8TcpServer tcpsvr, out SimpleTcpClient client);
@@ -48,7 +48,7 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
                 Console.WriteLine($"Recv {recvMsg}");
             };
 
-            tcpsvr.Start(); 
+            tcpsvr.Start();
             Task.Delay(500000).Wait();
         }
         [TestMethod()]
@@ -67,7 +67,7 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             client.Events.Connected += (sender, e) =>
             {
                 Console.WriteLine($"{e.IpPort} is connected!");
-                client.Send(  STX + sendMsg + ETX);
+                client.Send(STX + sendMsg + ETX);
             };
 
             tcpsvr.Start();
@@ -75,7 +75,7 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             Task.Delay(500).Wait();
             CloseTCPPair(tcpsvr, client);
 
-            Assert.AreEqual(sendMsg ,recvMsg);   
+            Assert.AreEqual(sendMsg, recvMsg);
         }
 
         [TestMethod()]
@@ -84,10 +84,10 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             CreateTCPPair(out UTF8TcpServer tcpsvr, out SimpleTcpClient client);
 
             List<string> RecvArr = new List<string>();
- 
+
             tcpsvr.Events.DataReceived += (sender, e) =>
             {
-               RecvArr.Add(  e.Sentence);
+                RecvArr.Add(e.Sentence);
                 Console.WriteLine($"recv {e.Sentence}");
             };
 
@@ -95,7 +95,7 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             client.Events.Connected += (sender, e) =>
             {
                 Console.WriteLine($"{e.IpPort} is connected!");
-                client.Send(STX + MSG1 + ETX+ STX+MSG2+ETX);
+                client.Send(STX + MSG1 + ETX + STX + MSG2 + ETX);
             };
 
             tcpsvr.Start();
@@ -157,7 +157,7 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             client.Events.Connected += (sender, e) =>
             {
                 Console.WriteLine($"{e.IpPort} is connected!");
-                client.Send(STX + MSG1 );
+                client.Send(STX + MSG1);
                 Task.Delay(1000).Wait();
                 client.Send(STX + MSG2 + ETX);
             };
@@ -168,8 +168,8 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             Task.Delay(1500).Wait();
             CloseTCPPair(tcpsvr, client);
 
-            Assert.IsTrue(RecvArr.Count() ==1);
-            Assert.AreEqual(RecvArr[0], MSG2); 
+            Assert.IsTrue(RecvArr.Count() == 1);
+            Assert.AreEqual(RecvArr[0], MSG2);
         }
         [TestMethod()]
         public void 只有STX_数据_ETX分离测试()
@@ -188,7 +188,7 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             client.Events.Connected += (sender, e) =>
             {
                 Console.WriteLine($"{e.IpPort} is connected!");
-                client.Send(  STX + MSG1);
+                client.Send(STX + MSG1);
                 Task.Delay(300).Wait();
                 client.Send(MSG2);
                 Task.Delay(300).Wait();
@@ -202,7 +202,7 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             CloseTCPPair(tcpsvr, client);
 
             Assert.IsTrue(RecvArr.Count() == 1);
-            Assert.AreEqual(RecvArr[0], MSG1+MSG2+MSG3); 
+            Assert.AreEqual(RecvArr[0], MSG1 + MSG2 + MSG3);
         }
         [TestMethod()]
         public void 半包加完整包测试()
@@ -269,6 +269,71 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             Assert.IsTrue(RecvArr.Count() == 2);
             Assert.AreEqual(RecvArr[0], MSG1);
             Assert.AreEqual(RecvArr[1], MSG3);
+        }
+
+        [TestMethod()]
+        public void 双Svr侦听测试()
+        {
+            var tcpsvr1 = new UTF8TcpServer($"127.0.0.1:{9000}");
+            var tcpsvr2 = new UTF8TcpServer($"127.0.0.1:{9001}");
+            var client1 = new SimpleTcpClient($"127.0.0.1:{9000}");
+            var client2 = new SimpleTcpClient($"127.0.0.1:{9001}");
+
+            List<string> RecvArr1 = new List<string>();
+            {
+
+                tcpsvr1.Events.DataReceived += (sender, e) =>
+                {
+                    RecvArr1.Add(e.Sentence);
+                    Console.WriteLine($"recv {e.Sentence}");
+                };
+
+                client1.Events.Connected += (sender, e) =>
+                {
+                    Console.WriteLine($"{e.IpPort} is connected!");
+                    client1.Send(STX + MSG1);
+                    Task.Delay(1000).Wait();
+                    client1.Send(ETX + STX + MSG3 + ETX);
+                };
+
+                tcpsvr1.Start();
+                client1.ConnectWithRetries(5000);
+            }
+
+            List<string> RecvArr2 = new List<string>();
+            {
+
+
+                tcpsvr2.Events.DataReceived += (sender, e) =>
+                {
+                    RecvArr2.Add(e.Sentence);
+                    Console.WriteLine($"recv {e.Sentence}");
+                };
+
+                client2.Events.Connected += (sender, e) =>
+                {
+                    Console.WriteLine($"{e.IpPort} is connected!");
+                    client2.Send(STX + MSG1);
+                    Task.Delay(1000).Wait();
+                    client2.Send(ETX + STX + MSG3 + ETX);
+                };
+
+                tcpsvr2.Start();
+                client2.ConnectWithRetries(5000);
+            }
+
+
+            Task.Delay(1500).Wait();
+            CloseTCPPair(tcpsvr1, client1);
+            CloseTCPPair(tcpsvr2, client2);
+
+            Assert.IsTrue(RecvArr1.Count() == 2);
+            Assert.AreEqual(RecvArr1[0], MSG1);
+            Assert.AreEqual(RecvArr1[1], MSG3);
+
+            Assert.IsTrue(RecvArr2.Count() == 2);
+            Assert.AreEqual(RecvArr2[0], MSG1);
+            Assert.AreEqual(RecvArr2[1], MSG3);
         }
     }
 }

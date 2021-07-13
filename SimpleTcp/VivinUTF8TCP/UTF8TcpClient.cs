@@ -23,7 +23,7 @@ namespace SimpleTcp.VivinUTF8TCP
         /// </summary>
         public static int StreamBuffSize { get; set; } = 65535;
         SimpleTcpClient _client;
-        BuffManager recvBuff;
+        BuffManager _recvBuff;
         /// <summary>
         /// Instantiates the TCP client without SSL.  Set the Connected, Disconnected, and DataReceived callbacks.  Once set, use Connect() to connect to the server.
         /// </summary>
@@ -58,7 +58,7 @@ namespace SimpleTcp.VivinUTF8TCP
             _client.Events.Connected += Events_Connected;
             _client.Events.Disconnected += Events_Disconnected;
             _client.Events.DataReceived += Events_DataReceived;
-            recvBuff = new BuffManager(StreamBuffSize);
+            _recvBuff = new BuffManager(StreamBuffSize);
         }
 
         /// <summary>
@@ -75,19 +75,32 @@ namespace SimpleTcp.VivinUTF8TCP
         public Action<string> Logger { get => _client.Logger; set { _client.Logger = value; } }
 
 
-        private void Events_Connected(SimpleTcpClient sender, ClientConnectedEventArgs e)
+        private void Events_Connected(SimpleTcpClient client, ClientConnectedEventArgs e)
         {
-            _Events.HandleConnected(sender, e);
+            if (client != _client)
+            {
+                throw new NotImplementedException();
+            }
+            _Events.HandleConnected(client, e);
         }
-        private void Events_Disconnected(SimpleTcpClient sender, ClientDisconnectedEventArgs e)
+        private void Events_Disconnected(SimpleTcpClient client, ClientDisconnectedEventArgs e)
         {
-            _Events.HandleClientDisconnected(sender, e);
+            if (client != _client)
+            {
+                throw new NotImplementedException();
+            }
+            _Events.HandleClientDisconnected(client, e);
         }
         private void Events_DataReceived(SimpleTcpClient client, DataReceivedEventArgs e)
         {
-            CutToSentenceInBuff(client, e.Data.ToList());
+            if(client!= _client)
+            {
+                throw new NotImplementedException();
+            }
+            CutToSentenceInBuff(e.IpPort, e.Data.ToList(), _recvBuff);
         }
-        void CutToSentenceInBuff(SimpleTcpClient client, List<byte> data)
+        // void CutToSentenceInBuff(SimpleTcpClient client, List<byte> data)
+        void CutToSentenceInBuff(string ipPort, List<byte> data, BuffManager recvBuff)
         { 
             var LEN = data.Count;
             int p = 0;
@@ -113,7 +126,7 @@ namespace SimpleTcp.VivinUTF8TCP
                         else
                         {//找到了ETX
                             recvBuff.Concat(data, idxSTX, idxETX - idxSTX + 1);
-                            _Events.HandleDataReceived(client, new UTF8ReceivedEventArgs(client.ServerIpPort, recvBuff));
+                            _Events.HandleDataReceived(this, new UTF8ReceivedEventArgs(ipPort, recvBuff));
                             recvBuff.Clear();//处理完一笔就清空一笔.
 
                             p = idxETX + 1; //后续处理的起点
@@ -128,7 +141,7 @@ namespace SimpleTcp.VivinUTF8TCP
                     if (0 <= idxETX && idxETX < idxSTX)
                     {//第一帧STX+data1, 第二帧 data2+ETX+STX+data3+ETX 
                         recvBuff.Concat(data, p, idxETX + 1);
-                        _Events.HandleDataReceived(client, new UTF8ReceivedEventArgs(client.ServerIpPort, recvBuff));
+                        _Events.HandleDataReceived(this, new UTF8ReceivedEventArgs(ipPort, recvBuff));
                         recvBuff.Clear();//处理完一笔就清空一笔.
 
                         p = idxETX + 1; //后续处理的起点
@@ -145,7 +158,7 @@ namespace SimpleTcp.VivinUTF8TCP
                         else
                         {//找到了ETX
                             recvBuff.Concat(data, p, idxETX - p + 1);
-                            _Events.HandleDataReceived(client, new UTF8ReceivedEventArgs(client.ServerIpPort, recvBuff));
+                            _Events.HandleDataReceived(this, new UTF8ReceivedEventArgs(ipPort, recvBuff));
                             recvBuff.Clear();//处理完一笔就清空一笔.
 
                             p = idxETX + 1; //后续处理的起点

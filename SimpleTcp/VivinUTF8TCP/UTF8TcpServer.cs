@@ -97,8 +97,8 @@ namespace SimpleTcp.VivinUTF8TCP
             {
                 throw new NotImplementedException();
             }
-            CutToSentenceInBuff(e.IpPort, e.Data.ToList());
-            Console.WriteLine("throw not impletment!");
+            var recvBuff = _svr.GetClientMeta(e.IpPort).RecvBuff;
+            CutToSentenceInBuff(e.IpPort, e.Data.ToList(), recvBuff); 
         }
 
         private void Events_ClientDisconnected(SimpleTcpServer svr, ClientDisconnectedEventArgs e)
@@ -174,9 +174,8 @@ namespace SimpleTcp.VivinUTF8TCP
         }
 
 
-        void CutToSentenceInBuff(string ipPort, List<byte> data)
-        {
-            var recvBuff = _svr.GetClientMeta(ipPort).RecvBuff;
+        void CutToSentenceInBuff(string ipPort, List<byte> data, BuffManager recvBuff)
+        { 
             var LEN = data.Count;
             int p = 0;
             int idxSTX = 0, idxETX = 0;
