@@ -81,7 +81,7 @@ namespace SimpleTcp.VivinUTF8TCP
             {
                 throw new NotImplementedException();
             }
-            _Events.HandleConnected(client, e);
+            _Events.HandleConnected(this, e);
         }
         private void Events_Disconnected(SimpleTcpClient client, ClientDisconnectedEventArgs e)
         {
@@ -89,7 +89,7 @@ namespace SimpleTcp.VivinUTF8TCP
             {
                 throw new NotImplementedException();
             }
-            _Events.HandleClientDisconnected(client, e);
+            _Events.HandleClientDisconnected(this, e);
         }
         private void Events_DataReceived(SimpleTcpClient client, DataReceivedEventArgs e)
         {
