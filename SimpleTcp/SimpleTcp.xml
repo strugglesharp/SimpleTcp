@@ -720,6 +720,11 @@
             </summary>
             <param name="ipPort">The IP:port of the server.</param> 
         </member>
+        <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.Stop">
+            <summary>
+            Stop accepting new connections.
+            </summary>
+        </member>
         <member name="M:SimpleTcp.VivinUTF8TCP.UTF8TcpServer.#ctor(System.String,System.Int32)">
             <summary>
             Instantiates the TCP server without SSL.  Set the ClientConnected, ClientDisconnected, and DataReceived callbacks.  Once set, use Start() to begin listening for connections.

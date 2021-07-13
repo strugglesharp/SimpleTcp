@@ -20,6 +20,7 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
         const string ETX = "\x03";
         static void CreateTCP(int port, out SimpleTcpServer tcpsvr, out UTF8TcpClient client)
         {
+            port = 9999;
             tcpsvr = new SimpleTcpServer($"127.0.0.1:{port}");
             client = new UTF8TcpClient($"127.0.0.1:{port}");
             client.Keepalive.EnableTcpKeepAlives = true;
@@ -28,6 +29,11 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             client.Settings.ConnectTimeoutMs = 5000;
 
             Console.WriteLine($"使用端口 {port}");
+        }
+        static void CloseListen(SimpleTcpServer tcp)
+        {
+            tcp.Stop();
+            tcp.Dispose();
         }
 
         [TestMethod()]
@@ -53,7 +59,7 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             tcpsvr.Start();
             client.ConnectWithRetries(5000);
             Task.Delay(500).Wait();
-
+            CloseListen(tcpsvr);
             Assert.AreEqual(sendMsg ,recvMsg);   
         }
 
@@ -80,7 +86,7 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             tcpsvr.Start();
             client.ConnectWithRetries(5000);
             Task.Delay(500).Wait();
-
+            CloseListen(tcpsvr);
             Assert.IsTrue(RecvArr.Count() == 2);
             Assert.AreEqual(RecvArr[0], MSG1);
             Assert.AreEqual(RecvArr[1], MSG2);
@@ -112,7 +118,7 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             client.ConnectWithRetries(5000);
 
             Task.Delay(1500).Wait();
-
+            CloseListen(tcpsvr);
 
             Assert.IsTrue(RecvArr.Count() == 2);
             Assert.AreEqual(RecvArr[0], MSG1);
@@ -145,7 +151,7 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             client.ConnectWithRetries(5000);
 
             Task.Delay(1500).Wait();
-
+            CloseListen(tcpsvr);
 
             Assert.IsTrue(RecvArr.Count() ==1);
             Assert.AreEqual(RecvArr[0], MSG2); 
@@ -178,7 +184,7 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             client.ConnectWithRetries(5000);
 
             Task.Delay(1500).Wait();
-
+            CloseListen(tcpsvr);
 
             Assert.IsTrue(RecvArr.Count() == 1);
             Assert.AreEqual(RecvArr[0], MSG1+MSG2+MSG3); 
@@ -209,7 +215,7 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             client.ConnectWithRetries(5000);
 
             Task.Delay(1500).Wait();
-
+            CloseListen(tcpsvr);
 
             Assert.IsTrue(RecvArr.Count() == 2);
             Assert.AreEqual(RecvArr[0], MSG1);
@@ -243,7 +249,7 @@ namespace SimpleTcp.VivinUTF8TCP.Tests
             client.ConnectWithRetries(5000);
 
             Task.Delay(1500).Wait();
-
+            CloseListen(tcpsvr);
 
             Assert.IsTrue(RecvArr.Count() == 2);
             Assert.AreEqual(RecvArr[0], MSG1);

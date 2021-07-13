@@ -38,6 +38,10 @@ namespace SimpleTcp.VivinUTF8TCP
             _svr = new SimpleTcpServer(ipPort);
             InitBind();
         }
+        /// <summary>
+        /// Stop accepting new connections.
+        /// </summary>
+        public void Stop() => _svr.Stop();
 
         /// <summary>
         /// Instantiates the TCP server without SSL.  Set the ClientConnected, ClientDisconnected, and DataReceived callbacks.  Once set, use Start() to begin listening for connections.
@@ -112,6 +116,8 @@ namespace SimpleTcp.VivinUTF8TCP
             {
                 throw new NotImplementedException();
             }
+
+            _svr.GetClientMeta(e.IpPort).RecvBuff = new BuffManager(StreamBuffSize);
             Events.HandleConnected(this, e);
         }
 
