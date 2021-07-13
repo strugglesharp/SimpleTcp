@@ -199,6 +199,8 @@ namespace SimpleTcp.VivinUTF8TCP
         /// </summary>
         public bool IsConnected => _client.IsConnected;
 
+        public object ServerIpPort => _client.ServerIpPort;
+
         /// <summary>
         /// Send data to the server.
         /// </summary>

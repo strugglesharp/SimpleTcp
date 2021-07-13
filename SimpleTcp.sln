@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerTest", "ServerTest\Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UTF8TCPClientTest", "UTF8TCPClientTest\UTF8TCPClientTest.csproj", "{D61F46D2-B611-433B-88E9-04BAC6E20E67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleTcpVivinTests", "SimpleTcpVivinTests\SimpleTcpVivinTests.csproj", "{EA2F494D-8884-4AEA-9C23-007510651E6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleTcpVivinTests", "SimpleTcpVivinTests\SimpleTcpVivinTests.csproj", "{EA2F494D-8884-4AEA-9C23-007510651E6B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
