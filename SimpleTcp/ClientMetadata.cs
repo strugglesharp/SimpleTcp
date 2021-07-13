@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleTcp.VivinUTF8TCP;
+using System;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
@@ -39,10 +40,12 @@ namespace SimpleTcp
 
         internal CancellationToken Token { get; set; }
 
+        internal BuffManager RecvBuff;
+
         #endregion
 
         #region Private-Members
-         
+
         private System.Net.Sockets.TcpClient _TcpClient = null;
         private NetworkStream _NetworkStream = null;
         private SslStream _SslStream = null;

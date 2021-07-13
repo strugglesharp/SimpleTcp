@@ -12,7 +12,7 @@ namespace SimpleTcp
             IpPort = ipPort;
             Data = data;
         }
-
+                
         /// <summary>
         /// The IP address and port number of the connected endpoint.
         /// </summary>

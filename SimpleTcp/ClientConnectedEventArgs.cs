@@ -12,6 +12,7 @@ namespace SimpleTcp
             IpPort = ipPort;
         }
 
+
         /// <summary>
         /// The IP address and port number of the connected client socket.
         /// </summary>

@@ -23,6 +23,7 @@ namespace SimpleTcp.VivinUTF8TCP
         /// </summary>
         public static int StreamBuffSize { get; set; } = 65535;
         SimpleTcpClient _client;
+        BuffManager recvBuff;
         /// <summary>
         /// Instantiates the TCP client without SSL.  Set the Connected, Disconnected, and DataReceived callbacks.  Once set, use Connect() to connect to the server.
         /// </summary>
@@ -33,6 +34,11 @@ namespace SimpleTcp.VivinUTF8TCP
             InitBind();
         }
 
+        internal UTF8TcpClient(SimpleTcpClient client)
+        {
+            _client = client;
+            InitBind();
+        }
 
 
         /// <summary>
@@ -52,7 +58,7 @@ namespace SimpleTcp.VivinUTF8TCP
             _client.Events.Connected += Events_Connected;
             _client.Events.Disconnected += Events_Disconnected;
             _client.Events.DataReceived += Events_DataReceived;
-            _client.RecvBuff = new BuffManager(StreamBuffSize);
+            recvBuff = new BuffManager(StreamBuffSize);
         }
 
         /// <summary>
@@ -82,8 +88,7 @@ namespace SimpleTcp.VivinUTF8TCP
             CutToSentenceInBuff(client, e.Data.ToList());
         }
         void CutToSentenceInBuff(SimpleTcpClient client, List<byte> data)
-        {
-            BuffManager recvBuff = client.RecvBuff;
+        { 
             var LEN = data.Count;
             int p = 0;
             int idxSTX = 0, idxETX = 0;
@@ -158,6 +163,7 @@ namespace SimpleTcp.VivinUTF8TCP
         }
 
         UTF8TcpClientEvents _Events = new UTF8TcpClientEvents();
+
 
         /// <summary>
         /// UTF8Tcp client events.

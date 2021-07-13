@@ -142,7 +142,6 @@ namespace SimpleTcp
         private Task _DataReceiver = null;
         private CancellationTokenSource _TokenSource = new CancellationTokenSource();
         private CancellationToken _Token;
-        internal BuffManager RecvBuff;
         #endregion
 
         #region Constructors-and-Factories

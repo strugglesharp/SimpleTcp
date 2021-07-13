@@ -120,6 +120,9 @@ namespace SimpleTcp
 
         private ConcurrentDictionary<string, ClientMetadata> _Clients = new ConcurrentDictionary<string, ClientMetadata>();
         private ConcurrentDictionary<string, DateTime> _ClientsLastSeen = new ConcurrentDictionary<string, DateTime>();
+
+     
+
         private ConcurrentDictionary<string, DateTime> _ClientsKicked = new ConcurrentDictionary<string, DateTime>();
         private ConcurrentDictionary<string, DateTime> _ClientsTimedout = new ConcurrentDictionary<string, DateTime>();
 
@@ -385,6 +388,12 @@ namespace SimpleTcp
             Logger?.Invoke(_Header + "stopped");
         }
 
+        internal ClientMetadata GetClientMeta(string IpPort)
+        {
+            var rst = _Clients[IpPort];
+            return rst;
+        }
+
         /// <summary>
         /// Retrieve a list of client IP:port connected to the server.
         /// </summary>
@@ -394,7 +403,7 @@ namespace SimpleTcp
             List<string> clients = new List<string>(_Clients.Keys);
             return clients;
         }
-
+ 
         /// <summary>
         /// Determines if a client is connected by its IP:port.
         /// </summary>
